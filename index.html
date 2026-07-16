@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta name="description" content="منيو مطعم تفاعلي ثلاثي الأبعاد - اكتشف أطباقنا المميزة بتجربة فريدة" />
+    <title>المطعم | منيو تفاعلي ثلاثي الأبعاد</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800;900&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <header class="header" id="mainHeader">
+        <div class="header__logo">
+            <h1 class="header__logo-text" id="headerLogoText">المطعم</h1>
+        </div>
+        <!-- ===== BACK BUTTON ===== -->
+        <button class="back-btn" id="backBtn" style="display:none;" aria-label="رجوع">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
+                stroke-linejoin="round">
+                <path d="M9 18l6-6-6-6" />
+            </svg>
+            <span>رجوع</span>
+        </button>
+    </header>
+
+
+
+    <!-- ===== 3D CAROUSEL SCENE ===== -->
+    <canvas id="carouselCanvas"></canvas>
+
+    <main class="content-panel">
+        <!-- ===== INFO CARD (Category View) ===== -->
+        <div class="info-card info-card--category" id="categoryInfoCard" aria-live="polite">
+            <div class="info-card__icon" id="categoryIcon"></div>
+            <h2 class="info-card__title" id="categoryTitle"></h2>
+            <p class="info-card__subtitle" id="categorySubtitle"></p>
+            <div class="info-card__badge" id="categoryBadge">
+                <span id="categoryCount">0</span> طبق
+            </div>
+            <button class="info-card__btn" id="categorySelectBtn">
+                استكشف الأطباق
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <path d="M15 18l-6-6 6-6" />
+                </svg>
+            </button>
+        </div>
+
+        <!-- ===== INFO CARD (Product View) ===== -->
+        <div class="info-card info-card--product" id="productInfoCard" style="display:none;" aria-live="polite">
+            <div class="info-card__tag" id="productTag"></div>
+            <h2 class="info-card__title" id="productTitle"></h2>
+            <p class="info-card__desc" id="productDesc"></p>
+            <div class="info-card__meta product-meta-footer">
+                <div class="info-card__price">
+                    <span class="info-card__price-value" id="productPrice">0</span>
+                    <span class="info-card__price-currency">ر.س</span>
+                </div>
+            </div>
+        </div>
+    </main>
+
+
+
+    <!-- ===== NOTIFICATION ===== -->
+    <div class="notification" id="notification">
+        <span class="notification__text" id="notificationText"></span>
+    </div>
+
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script type="module" src="/app.js"></script>
+</body>
+
+</html>
