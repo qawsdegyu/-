@@ -450,17 +450,15 @@ import { supabase } from './src/supabaseClient.js';
       if (t < 0.1) {
         group.userData.rimMat.color.setHex(0xffffff);
         group.userData.rimMat.opacity = 0.3;
-        group.userData.glowMat.opacity = 0.5; // Strong drop shadow for active
       } else {
         group.userData.rimMat.color.set(group.userData.item.color || 0xD4A843);
         group.userData.rimMat.opacity = (1 - t) * 0.4;
-        group.userData.glowMat.opacity = (1 - t) * 0.15;
       }
 
       // Update overall opacity
       if (group.children) {
         group.children.forEach(c => {
-          if (c.material && c.material.opacity !== undefined && c.material !== group.userData.glowMat && c.material !== group.userData.rimMat) {
+          if (c.material && c.material.opacity !== undefined && c.material !== group.userData.rimMat) {
             c.material.opacity = opacity;
           }
         });
