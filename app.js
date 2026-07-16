@@ -213,7 +213,7 @@ import { supabase } from './src/supabaseClient.js';
   function createCardMesh(item, index) {
     const group = new THREE.Group();
 
-    const radius = isMobile ? 0.7 : 0.95;
+    const radius = isMobile ? 0.95 : 1.15;
     const thickness = 0.06;
 
     // Create cylinder (circle with thickness)
@@ -860,7 +860,15 @@ import { supabase } from './src/supabaseClient.js';
           backBtn.classList.remove("visible");
           
           const headerLogoText = document.getElementById("headerLogoText");
-          if (headerLogoText) headerLogoText.textContent = MENU_DATA.restaurant?.name || "المطعم";
+          if (headerLogoText) {
+              const isUrl = MENU_DATA.restaurant?.logo && MENU_DATA.restaurant.logo.startsWith('http');
+              const restName = MENU_DATA.restaurant?.name || "المطعم";
+              if (isUrl) {
+                  headerLogoText.innerHTML = `<img src="${MENU_DATA.restaurant.logo}" style="height: 35px; width: 35px; object-fit: cover; border-radius: 50%; vertical-align: middle; margin-left: 10px;">` + restName;
+              } else {
+                  headerLogoText.textContent = (MENU_DATA.restaurant?.logo || '') + ' ' + restName;
+              }
+          }
 
           buildCarousel(MENU_DATA.categories, true);
           autoRotateDir = 1;
@@ -1010,10 +1018,28 @@ import { supabase } from './src/supabaseClient.js';
         }));
       }
       
-      // Update Header Logo Text
+      // Update Header Logo Text & Favicon
       const headerLogoText = document.getElementById("headerLogoText");
-      if (headerLogoText && MENU_DATA.restaurant?.name) {
-          headerLogoText.textContent = MENU_DATA.restaurant.name;
+      if (MENU_DATA.restaurant) {
+          const isUrl = MENU_DATA.restaurant.logo && MENU_DATA.restaurant.logo.startsWith('http');
+          
+          if (headerLogoText && MENU_DATA.restaurant.name) {
+              if (isUrl) {
+                  headerLogoText.innerHTML = `<img src="${MENU_DATA.restaurant.logo}" style="height: 35px; width: 35px; object-fit: cover; border-radius: 50%; vertical-align: middle; margin-left: 10px;">` + MENU_DATA.restaurant.name;
+              } else {
+                  headerLogoText.textContent = MENU_DATA.restaurant.logo + ' ' + MENU_DATA.restaurant.name;
+              }
+          }
+          
+          if (isUrl) {
+              let link = document.querySelector("link[rel~='icon']");
+              if (!link) {
+                  link = document.createElement('link');
+                  link.rel = 'icon';
+                  document.head.appendChild(link);
+              }
+              link.href = MENU_DATA.restaurant.logo;
+          }
       }
     } catch (e) {
       console.error("Error loading menu data:", e);
