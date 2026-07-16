@@ -118,21 +118,6 @@ import { supabase } from './src/supabaseClient.js';
     pointLight2 = new THREE.PointLight(0xb91c1c, 0.4, 14);
     pointLight2.position.set(4, 2, -2);
     scene.add(pointLight2);
-
-    // Ground reflection plane
-    const groundGeo = new THREE.PlaneGeometry(40, 40);
-    const groundMat = new THREE.MeshStandardMaterial({
-      color: 0x080808,
-      metalness: 0.9,
-      roughness: 0.3,
-      transparent: true,
-      opacity: 0.6,
-    });
-    const ground = new THREE.Mesh(groundGeo, groundMat);
-    ground.rotation.x = -Math.PI / 2;
-    ground.position.y = -2.2;
-    ground.receiveShadow = true;
-    scene.add(ground);
   }
 
   // =================================================================
