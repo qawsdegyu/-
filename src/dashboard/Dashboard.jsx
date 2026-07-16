@@ -2,6 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { supabase } from '../supabaseClient';
 
 export default function Dashboard() {
+    const [session, setSession] = useState(null);
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [loginError, setLoginError] = useState('');
+    const [loginLoading, setLoginLoading] = useState(false);
+
     const [activeTab, setActiveTab] = useState('restaurant'); // restaurant, categories, products
     const [loading, setLoading] = useState(true);
 
@@ -15,7 +21,20 @@ export default function Dashboard() {
     const [editingProduct, setEditingProduct] = useState(null);
 
     useEffect(() => {
-        fetchData();
+        // Check current session
+        supabase.auth.getSession().then(({ data: { session } }) => {
+            setSession(session);
+            if (session) fetchData();
+            else setLoading(false);
+        });
+
+        // Listen for login/logout events
+        const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+            setSession(session);
+            if (session) fetchData();
+        });
+
+        return () => subscription.unsubscribe();
     }, []);
 
     async function fetchData() {
@@ -111,17 +130,56 @@ export default function Dashboard() {
         }
     }
 
-    if (loading) return <div style={{padding: '2rem'}}>جاري التحميل...</div>;
+    // --- AUTH HANDLERS ---
+    async function handleLogin(e) {
+        e.preventDefault();
+        setLoginLoading(true);
+        setLoginError('');
+        const { error } = await supabase.auth.signInWithPassword({ email, password });
+        if (error) setLoginError(error.message);
+        setLoginLoading(false);
+    }
+    
+    async function handleLogout() {
+        await supabase.auth.signOut();
+    }
+
+    if (loading) return <div style={{padding: '2rem', textAlign: 'center'}}>جاري التحميل...</div>;
+
+    if (!session) {
+        return (
+            <div className="login-container">
+                <div className="login-card">
+                    <h2 className="login-title">تسجيل الدخول للإدارة</h2>
+                    {loginError && <div className="login-error">فشل تسجيل الدخول. تأكد من صحة البريد الإلكتروني وكلمة المرور.</div>}
+                    <form onSubmit={handleLogin} style={{textAlign: 'right'}}>
+                        <div className="form-group">
+                            <label className="form-label">البريد الإلكتروني (Email)</label>
+                            <input className="form-input" type="email" value={email} onChange={(e) => setEmail(e.target.value)} required dir="ltr" />
+                        </div>
+                        <div className="form-group">
+                            <label className="form-label">كلمة المرور (Password)</label>
+                            <input className="form-input" type="password" value={password} onChange={(e) => setPassword(e.target.value)} required dir="ltr" />
+                        </div>
+                        <button type="submit" className="btn-primary" style={{width: '100%', marginTop: '1rem'}} disabled={loginLoading}>
+                            {loginLoading ? 'جاري التحقق...' : 'دخول'}
+                        </button>
+                    </form>
+                </div>
+            </div>
+        );
+    }
 
     return (
         <div className="dashboard-container">
             <header className="dashboard-header">
                 <div className="dashboard-title">إدارة المنيو والتطبيق</div>
-                <div className="nav-links">
+                <div className="nav-links" style={{display: 'flex', gap: '0.5rem', alignItems: 'center'}}>
                     <button className={activeTab === 'restaurant' ? 'active' : ''} onClick={() => setActiveTab('restaurant')}>معلومات المطعم</button>
                     <button className={activeTab === 'categories' ? 'active' : ''} onClick={() => setActiveTab('categories')}>الأقسام</button>
                     <button className={activeTab === 'products' ? 'active' : ''} onClick={() => setActiveTab('products')}>الأصناف</button>
                     <button onClick={() => window.open('/', '_blank')}>عرض المنيو</button>
+                    <button onClick={handleLogout} style={{color: '#ef4444', border: '1px solid #ef4444'}}>تسجيل خروج</button>
                 </div>
             </header>
 
