@@ -172,3 +172,68 @@
     font-size: 0.875rem;
 }
 
+/* ===== RESPONSIVE DESIGN FOR MOBILE ===== */
+@media (max-width: 768px) {
+    .dashboard-container {
+        padding: 0.5rem;
+    }
+
+    .dashboard-header {
+        flex-direction: column;
+        gap: 1rem;
+        padding: 1rem;
+        align-items: stretch;
+        text-align: center;
+    }
+
+    .dashboard-title {
+        font-size: 1.25rem;
+    }
+
+    .nav-links {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 0.5rem;
+    }
+
+    .nav-links button {
+        padding: 0.5rem 0.8rem;
+        font-size: 0.85rem;
+    }
+
+    .section-card {
+        padding: 1.2rem;
+        margin-bottom: 1rem;
+    }
+
+    .flex-row {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .flex-row > button, 
+    .flex-row > input {
+        width: 100%;
+        margin-left: 0 !important;
+        margin-bottom: 0.5rem;
+    }
+
+    /* Make table scrollable */
+    .data-table {
+        display: block;
+        width: 100%;
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+
+    .data-table th, .data-table td {
+        padding: 0.75rem 0.5rem;
+        font-size: 0.85rem;
+    }
+    
+    .login-card {
+        padding: 1.5rem;
+        margin: 1rem;
+    }
+}
