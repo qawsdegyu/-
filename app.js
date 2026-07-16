@@ -612,9 +612,11 @@ import { supabase } from './src/supabaseClient.js';
     // Fade out and remove old layers
     const oldBgs = container.querySelectorAll(".dynamic-bg-layer:not(:last-child)");
     oldBgs.forEach(bg => {
-        bg.style.opacity = "0";
+        if (bg && bg.style) {
+            bg.style.opacity = "0";
+        }
         setTimeout(() => {
-            if (bg.parentNode) bg.parentNode.removeChild(bg);
+            if (bg && bg.parentNode) bg.parentNode.removeChild(bg);
         }, 850);
     });
   }
