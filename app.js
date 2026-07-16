@@ -80,7 +80,7 @@ import { supabase } from './src/supabaseClient.js';
   // =================================================================
   function initThree() {
     scene = new THREE.Scene();
-    scene.fog = new THREE.FogExp2(0x0a0a0a, 0.035);
+    // Removed fog to keep the background clear
 
     camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 100);
     camera.position.set(0, 0.8, 8.5);
@@ -213,7 +213,7 @@ import { supabase } from './src/supabaseClient.js';
   function createCardMesh(item, index) {
     const group = new THREE.Group();
 
-    const radius = isMobile ? 0.95 : 1.15;
+    const radius = isMobile ? 0.7 : 0.95;
     const thickness = 0.06;
 
     // Create cylinder (circle with thickness)
@@ -287,25 +287,13 @@ import { supabase } from './src/supabaseClient.js';
     const rim = new THREE.Mesh(rimGeo, rimMat);
     group.add(rim);
 
-    // Glow behind card
-    const glowGeo = new THREE.SphereGeometry(radius * 1.1, 16, 16);
-    const glowMat = new THREE.MeshBasicMaterial({
-      color: 0x000000,
-      transparent: true,
-      opacity: 0.35,
-    });
-    const glow = new THREE.Mesh(glowGeo, glowMat);
-    glow.position.z = -0.2;
-    glow.scale.set(1.5, 1.5, 0.1);
-    group.add(glow);
+    // Glow removed for cleaner background
 
     group.userData = {
       index,
       item,
       cardMat: sideMat,
       rimMat,
-      glowMat,
-      glow,
     };
 
     return group;
@@ -888,13 +876,7 @@ import { supabase } from './src/supabaseClient.js';
           
           const headerLogoText = document.getElementById("headerLogoText");
           if (headerLogoText) {
-              const isUrl = MENU_DATA.restaurant?.logo && MENU_DATA.restaurant.logo.startsWith('http');
-              const restName = MENU_DATA.restaurant?.name || "المطعم";
-              if (isUrl) {
-                  headerLogoText.innerHTML = `<img src="${MENU_DATA.restaurant.logo}" style="height: 35px; width: 35px; object-fit: cover; border-radius: 50%; vertical-align: middle; margin-left: 10px;">` + restName;
-              } else {
-                  headerLogoText.textContent = (MENU_DATA.restaurant?.logo || '') + ' ' + restName;
-              }
+              headerLogoText.textContent = MENU_DATA.restaurant?.name || "المطعم";
           }
 
           buildCarousel(MENU_DATA.categories, true);
@@ -1051,11 +1033,7 @@ import { supabase } from './src/supabaseClient.js';
           const isUrl = MENU_DATA.restaurant.logo && MENU_DATA.restaurant.logo.startsWith('http');
           
           if (headerLogoText && MENU_DATA.restaurant.name) {
-              if (isUrl) {
-                  headerLogoText.innerHTML = `<img src="${MENU_DATA.restaurant.logo}" style="height: 35px; width: 35px; object-fit: cover; border-radius: 50%; vertical-align: middle; margin-left: 10px;">` + MENU_DATA.restaurant.name;
-              } else {
-                  headerLogoText.textContent = MENU_DATA.restaurant.logo + ' ' + MENU_DATA.restaurant.name;
-              }
+              headerLogoText.textContent = MENU_DATA.restaurant.name;
           }
           
           if (isUrl) {
