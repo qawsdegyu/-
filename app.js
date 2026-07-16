@@ -565,6 +565,8 @@ import { supabase } from './src/supabaseClient.js';
         onComplete: () => {
           const currentCat = MENU_DATA.categories[activeIndex];
           if (!currentCat) return;
+          
+          updateDynamicBackground(currentCat.image);
 
           if (categoryIcon) categoryIcon.style.display = "none";
           categoryTitle.textContent = currentCat.name;
@@ -588,6 +590,8 @@ import { supabase } from './src/supabaseClient.js';
           const currentCat = MENU_DATA.categories[selectedCategoryIndex];
           const currentItem = currentCat.items[activeIndex];
           if (!currentItem) return;
+          
+          updateDynamicBackground(currentItem.image);
 
           productTag.textContent = currentCat.name;
           productTitle.textContent = currentItem.name;
@@ -603,6 +607,29 @@ import { supabase } from './src/supabaseClient.js';
     }
   }
 
+  function updateDynamicBackground(imageUrl) {
+    const container = document.getElementById("dynamicBgContainer");
+    if (!container || !imageUrl) return;
+
+    const newBg = document.createElement("div");
+    newBg.className = "dynamic-bg-layer";
+    newBg.style.backgroundImage = `url(${imageUrl})`;
+    
+    container.appendChild(newBg);
+    
+    // Force reflow to ensure the transition applies
+    void newBg.offsetWidth;
+    newBg.style.opacity = "1";
+    
+    // Fade out and remove old layers
+    const oldBgs = container.querySelectorAll(".dynamic-bg-layer:not(:last-child)");
+    oldBgs.forEach(bg => {
+        bg.style.opacity = "0";
+        setTimeout(() => {
+            if (bg.parentNode) bg.parentNode.removeChild(bg);
+        }, 850);
+    });
+  }
 
   // =================================================================
   //  DRAG / TOUCH INTERACTION

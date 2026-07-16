@@ -35,6 +35,31 @@
   --z-loading: 200;
 }
 
+/* ===== DYNAMIC BACKGROUND ===== */
+#dynamicBgContainer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.dynamic-bg-layer {
+  position: absolute;
+  top: -10%;
+  left: -10%;
+  width: 120%;
+  height: 120%;
+  background-size: cover;
+  background-position: center;
+  filter: blur(25px) brightness(0.25);
+  opacity: 0;
+  transition: opacity 0.8s ease-in-out;
+}
+
 /* ===== RESET ===== */
 *,
 *::before,
